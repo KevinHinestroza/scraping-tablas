@@ -1,0 +1,25 @@
+# PIVOT TABLE O TABLAS DINAMICAS FACIL
+import pandas as pd
+
+# Mostrar hasta 20 columnas al imprimir
+pd.set_option('display.max_columns', 20)
+
+# Leer archivo de Excel desde la hoja "Sheet1"
+df_excel = pd.read_excel("tabla_wikipedia_numero_9.xlsx", sheet_name="Sheet1")
+print(df_excel.pivot_table(index='Equipo', values='Puntos'))
+
+#PONER EN MAYUSCULA O EN MINUSCULAS
+
+#poner solo la primera letra en mayuscula
+df_excel['Equipo'] = df_excel['Equipo'].str.title()
+#poner todo en mayuscula
+print(df_excel['Equipo'].str.upper())
+#poner todo en minuscula
+print(df_excel['Equipo'].str.lower())
+
+#EXTRAER STRINGS (DATOS O TEXTO) DE UNA COLUMNA
+print(df_excel['Equipo'].str.extract(r'([A-Z])'))
+
+#IDENTIFICAR CELDAS O VALORES VACIOS
+print(df_excel)
+print(df_excel['Equipo'].isnull())

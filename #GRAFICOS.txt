@@ -1,0 +1,26 @@
+#GRAFICOS
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Mostrar hasta 20 columnas
+pd.set_option('display.max_columns', 20)
+
+# Cargar Excel
+df_excel = pd.read_excel("tabla_wikipedia_numero_9.xlsx", sheet_name="Sheet1")
+
+# Crear tabla dinámica con Puntos por Equipo
+df_pivot = df_excel.pivot_table(index='Equipo', values='Puntos', aggfunc='sum')
+
+# Reiniciar índice para poder graficar
+df_plot = df_pivot.reset_index()
+
+# Crear gráfico de barras
+plt.figure(figsize=(10, 6))  # Tamaño opcional
+plt.bar(df_plot['Equipo'], df_plot['Puntos'])  # ← ¡Aquí ya está corregido!
+plt.xticks(rotation=45, ha='right')  # Rotar etiquetas
+plt.title('Puntos por Equipo')
+plt.xlabel('Equipo')
+plt.ylabel('Puntos')
+plt.tight_layout()
+plt.show()

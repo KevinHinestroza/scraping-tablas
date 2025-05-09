@@ -1,0 +1,26 @@
+# JUNTAR DOS DOCUMENTOS DE EXCEL O CVS PARA ANALIZAR
+import pandas as pd
+import numpy as np
+
+# Cargar la tabla principal desde el archivo Excel
+df_principal = pd.read_excel("tabla_wikipedia_numero_9.xlsx", sheet_name="Sheet1")
+
+# Simulamos una segunda tabla con información adicional por equipo
+df_colores = pd.DataFrame({
+    'Equipo': ['América de Cali', 'Atlético Nacional', 'Junior', 'Millonarios'],
+    'Color': ['Rojo', 'Verde', 'Rojo', 'Azul']
+})
+
+# Asegurarse de que no haya problemas de espacios o mayúsculas
+df_principal['Equipo'] = df_principal['Equipo'].str.strip()
+df_colores['Equipo'] = df_colores['Equipo'].str.strip()
+
+# Hacemos la unión (como un BuscarV en Excel) usando MERGE
+df_unido = pd.merge(df_principal, df_colores, on='Equipo', how='left')
+
+# Rellenamos los equipos que no estaban en df_colores con 'Sin color'
+df_unido['Color'].fillna('Sin color', inplace=True)
+
+# Mostrar resultado
+print("✅ DataFrame unido:\n")
+print(df_unido[['Equipo', 'Puntos', 'Color']])

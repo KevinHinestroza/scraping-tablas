@@ -1,0 +1,59 @@
+#USO FUNCIONAL DE EXCEL
+import pandas as pd
+import numpy as np
+
+# Mostrar hasta 20 columnas al imprimir
+pd.set_option('display.max_columns', 20)
+
+# Leer archivo de Excel desde la hoja "Sheet1"
+df_excel = pd.read_excel("tabla_wikipedia_numero_9.xlsx", sheet_name="Sheet1")
+
+# Mostrar la tabla completa para verificar
+print("📋 Tabla original:")
+print(df_excel)
+
+# --- ANALÍTICA BÁSICA ---
+
+# Extraer solo las columnas numéricas
+df_numerico = df_excel.select_dtypes(include='number')
+
+# ✅ Sumar valores por FILA (horizontales)
+suma_filas = df_numerico.sum(axis=1)
+print("\n▶ Suma por fila (horizontal):")
+print(suma_filas)
+
+# ✅ Sumar valores por COLUMNA (verticales)
+suma_columnas = df_numerico.sum(axis=0)
+print("\n▶ Suma por columna (vertical):")
+print(suma_columnas)
+
+# ✅ Ejemplo de operación entre columnas específicas (PG + PE)
+print("\n▶ PG + PE por equipo:")
+print(df_excel['PG'] + df_excel['PE'])
+
+# ✅ Contar cuántas veces aparece cada equipo (por si se repiten)
+print("\n▶ Conteo de equipos:")
+print(df_excel['Equipo'].value_counts())
+
+# --- CONDICIONAL DE PUNTOS ---
+
+# ✅ Clasificar equipos que tienen MÁS de 25 puntos
+df_excel['estado'] = np.where(df_excel['Puntos'] > 25, 'pass', 'fail')
+
+# ✅ Mostrar el resultado con columnas clave
+print("\n✅ Equipos clasificados por puntos:")
+print(df_excel[['Equipo', 'Puntos', 'estado']])
+
+# multiples condicionales (quienes ya pasaron, quienes podrian pasar, y quienes ya fallaron)
+conditions = [
+    (df_excel['Puntos'] >=25),
+    (df_excel['Puntos'] >=20) & (df_excel['Puntos'] <=25),
+    (df_excel['Puntos'] >=0) & (df_excel['Puntos'] <=20),
+]
+
+Values = [ 'pass', 'Might', 'fail']
+df_excel['estado especifico'] = np.select(conditions, Values)
+print(df_excel)
+
+# condicionales de sumar si, restar si, contar si, etc (para obtener promedios)
+#print(df_excel[dfexcel['gender'] == ['femate'].count())
