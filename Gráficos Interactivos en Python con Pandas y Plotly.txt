@@ -1,0 +1,123 @@
+#INSTALAR LIBRERIAS
+!pip install pandas
+!pip install plotly
+!pip install cufflinks
+
+#para JupyterNotebook se le pone !
+
+#LEER DATASETS Y TRANSFORMAS DATA
+
+import pandas as pd
+import cufflinks as cf
+from IPython.display import display, HTML
+
+cf.set_config_file(sharing='public', theme='white', offline=True)
+
+
+# Leer el archivo CSV correctamente
+df = pd.read_csv('C:/Users/User/Downloads/population_total.csv')
+
+# Mostrar las primeras filas con todas las columnas visibles
+print(df.head())
+
+df_population = pd.read_csv('C:/Users/User/Downloads/population_total.csv')
+
+#borrar valores nulos 
+df_population = df_population.dropna()
+
+df_population = df_population.pivot(index='year', columns='country', values='population')
+
+df_population[['United States', 'India', 'China', 'Indonesia', 'Brazil']]
+
+# LINE PLOT
+
+# ✅ GRAFICAR TODA LA TABLA (todos los países del DataFrame)
+# Esto genera un gráfico de líneas con una curva para cada país presente en df_population.
+df_population.iplot(kind='line')
+
+# ✅ GRAFICAR SOLO 5 PAÍSES (filtrados antes del gráfico)
+# Se seleccionan únicamente las columnas de los países deseados.
+df_population[['United States', 'India', 'China', 'Indonesia', 'Brazil']].iplot(kind='line')
+
+# ✅ GRAFICAR 5 PAÍSES CON TÍTULO Y PERSONALIZACIÓN
+# Además del filtro de países, se agrega título, nombres de ejes y tamaño del gráfico.
+df_population[['United States', 'India', 'China', 'Indonesia', 'Brazil']].iplot(
+    kind='line',
+    title='Crecimiento poblacional por país',
+    xTitle='Año',
+    yTitle='Población',
+    dimensions=(900, 500)
+)
+
+# BAR PLOT
+#ver poblacion de solo un año (año 2020)
+df_population_2020 = df_population[df_population.index.isin([2020])]
+df_population_2020 = df_population_2020.T
+
+# FILTRAR SOLO 5 PAÍSES
+df_population_2020 = df_population_2020.loc[
+    ['United States', 'India', 'China', 'Indonesia', 'Brazil']
+]
+
+# MOSTRAR RESULTADO
+print(df_population_2020)
+
+#desplegar la grafica de barras
+df_population[['United States', 'India', 'China', 'Indonesia', 'Brazil']].iplot(
+    kind='bar',
+    title='Crecimiento poblacional por país',
+    xTitle='Año',
+    yTitle='Población')
+
+ Bar Plot con varios datos (en este caso varios años)
+# Seleccionar datos de 5 países y filtrar los años deseados
+df_population_sample = df_population[
+    df_population.index.isin([1980, 1990, 2000, 2010, 2020])
+][['United States', 'India', 'China', 'Indonesia', 'Brazil']]
+
+# Crear gráfico de barras interactivo
+df_population_sample.iplot(
+    kind='bar',
+    barmode='group',
+    title='Crecimiento poblacional por país (varios años)',
+    xTitle='Año',
+    yTitle='Población',
+    dimensions=(1000, 500)
+)
+
+# BOX PLOT
+df_population['United States'].iplot(kind='box')
+
+#Box Plot de varios valores
+df_population[['United States', 'India', 'China', 'Indonesia', 'Brazil']].iplot(kind='box')
+
+#HISTOGRAMA
+df_population['United States'].iplot(kind='hist')
+#histograma con varios datos
+df_population[['United States', 'Indonesia']].iplot(kind='hist')
+
+#PIECHART
+# Crear tabla filtrada con países como índice y columna única "2020"
+df_population_2020 = df_population.loc[2020, ['United States', 'India', 'China', 'Indonesia', 'Brazil']]
+
+# Convertir a DataFrame y resetear índice para tener columnas 'country' y 'population'
+df_population_2020 = df_population_2020.reset_index()
+df_population_2020.columns = ['country', 'population']
+
+# Crear gráfico de pastel
+df_population_2020.iplot(
+    kind='pie',
+    labels='country',
+    values='population',
+    title='Población por país en 2020'
+)
+
+#SCATTER PLOT
+df_population[['United States', 'India', 'China', 'Indonesia', 'Brazil']].iplot(
+    kind='scatter', mode='markers',
+    title='Crecimiento poblacional por país',
+    xTitle='Año',
+    yTitle='Población',
+    dimensions=(900, 500))
+
+
